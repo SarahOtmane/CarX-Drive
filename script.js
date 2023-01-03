@@ -27,20 +27,48 @@ const materialCar = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 const car = new THREE.Mesh( geometryCar, materialCar );
 car.position.set(0, 2, -2);
 
-const geometryM = new THREE.CircleGeometry( .1, 35 );
-const materialM = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-const money = new THREE.Mesh( geometryM, materialM );
-money.position.set(0, 2, -15);
+const tabMoney = [];
+// const geometryM = new THREE.CircleGeometry( .1, 35 );
+// const materialM = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+// const money = new THREE.Mesh( geometryM, materialM );
+// money.position.set(0, 2, -15);
+function createMoney(){
+	for(let i = 0; i < 3; i++){
+		const geometryM = new THREE.CircleGeometry( .1, 35 );
+		const materialM = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+		const money = new THREE.Mesh( geometryM, materialM );
+		money.position.set(-1 + i, 2, -15);
+		tabMoney.push(money);
+	}
+}
+createMoney();
 
-const geometryB = new THREE.BoxGeometry(.1, .1, .1);
-const materialB = new THREE.MeshBasicMaterial( { color: 0x993300 } );
-const box = new THREE.Mesh( geometryB, materialB );
-box.position.set(0, 2, -3);
+const tabBox = [];
+function createBox(){
+	for(let i = 0; i < 3; i++){
+		const geometryB = new THREE.BoxGeometry(.15, .15, .15);
+		const materialB = new THREE.MeshBasicMaterial( { color: 0x993300 } );
+		const box = new THREE.Mesh( geometryB, materialB );
+		box.position.set(-1 + i, 2, -3); 
+		tabBox.push(box);
+	}
+}
+createBox();
+
+// const geometryB = new THREE.BoxGeometry(.1, .1, .1);
+// const materialB = new THREE.MeshBasicMaterial( { color: 0x993300 } );
+// const box = new THREE.Mesh( geometryB, materialB );
+// box.position.set(0, 2, -3);
 
 scene.add(car);
 scene.add(road);
-scene.add(money);
-scene.add(box);
+for(let i = 0; i < tabBox.length; i++){
+	scene.add(tabBox[i]);
+}
+
+for( let i = 0; i < tabMoney.length; i++){
+	scene.add(tabMoney[i]);
+}
 
 const aspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(40,aspect,.1,5000);
@@ -55,9 +83,15 @@ let zM = -15;
 let zB = -20;
 function animate() {
 	zM += 0.1;
+	for(let i = 0; i < tabMoney.length; i++){
+		tabMoney[i].position.setZ(zM);
+	}
+
 	zB += 0.1;
-	money.position.setZ(zM);
-	box.position.setZ(zB);
+	for(let i = 0; i < tabMoney.length; i++){
+		tabBox[i].position.setZ(zB);
+	}
+
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
 }
