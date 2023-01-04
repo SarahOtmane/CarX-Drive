@@ -27,7 +27,7 @@ loader.load( 'path/to/model.glb', function ( gltf ) {
 const geometryCar = new THREE.BoxGeometry(.5, .5, .5);
 const materialCar = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 const car = new THREE.Mesh( geometryCar, materialCar );
-car.position.set(0, 2, -2);
+car.position.set(0, 2, -4);
 
 
 	// the function which will create the money
@@ -88,7 +88,7 @@ for( let i = 0; i < tabMoney.length; i++){
 	// create the camera
 const aspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(40,aspect,.1,5000);
-camera.position.set(0, 4, 1);
+camera.position.set(0, 5, 1);
 camera.rotateX(-0.4);
 
 	// create the renderer
@@ -108,8 +108,9 @@ function player(){
 		if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)){
 			switch(event.key){
 				case 'ArrowRight' : 
-					if(car.position.x > 1.7){
-						break;
+					if(car.position.x > 2){
+						car.position.y = 0;
+						alert('vous avez perdu le jeu');
 					}
 					car.position.x += .1;
 					break;	
@@ -128,7 +129,7 @@ player();
 
 function animate() {
 	for(let i = 0; i < tabMoney.length; i++){
-		if(tabMoney[i].position.z >= -1.6){
+		if(tabMoney[i].position.z >= -2.2){
 			tabMoney[i].position.z = z_initialM[i];
 			break;
 		}
@@ -136,7 +137,7 @@ function animate() {
 	}
 
 	for(let i = 0; i < tabBox.length; i++){
-		if(tabBox[i].position.z >= -1.6){
+		if(tabBox[i].position.z >= -2.2){
 			tabBox[i].position.z = z_initialB[i];
 			break;
 		}
