@@ -28,32 +28,38 @@ const car = new THREE.Mesh( geometryCar, materialCar );
 car.position.set(0, 2, -2);
 
 const tabMoney = [];
+let z_initial = [];
 // const geometryM = new THREE.CircleGeometry( .1, 35 );
 // const materialM = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 // const money = new THREE.Mesh( geometryM, materialM );
 // money.position.set(0, 2, -15);
-function createMoney(){
-	for(let i = 0; i < 3; i++){
+function createMoney(positionX, positionZ, nombreCreation, toChange){
+	for(let i = 0; i < nombreCreation; i++){
 		const geometryM = new THREE.CircleGeometry( .1, 35 );
 		const materialM = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 		const money = new THREE.Mesh( geometryM, materialM );
-		money.position.set(-1 + i, 2, -15);
+		money.position.set(positionX, 2, positionZ);
+		if (toChange === 'x'){
+			money.position.setX(i);
+		}else if(toChange === 'z'){
+			money.position.setZ(positionZ - i);
+		}
 		tabMoney.push(money);
+		z_initial.push(money.position.z);
 	}
 }
-createMoney();
+createMoney(-1, -15, 3, 'z');
+createMoney(0, -15, 1, 'x');
 
 const tabBox = [];
-function createBox(){
-	for(let i = 0; i < 3; i++){
-		const geometryB = new THREE.BoxGeometry(.15, .15, .15);
-		const materialB = new THREE.MeshBasicMaterial( { color: 0x993300 } );
-		const box = new THREE.Mesh( geometryB, materialB );
-		box.position.set(-1 + i, 2, -3); 
-		tabBox.push(box);
-	}
+function createBox(x, y, z){
+	const geometryB = new THREE.BoxGeometry(.15, .15, .15);
+	const materialB = new THREE.MeshBasicMaterial( { color: 0x993300 } );
+	const box = new THREE.Mesh( geometryB, materialB );
+	box.position.set(x, y, z); 
+	tabBox.push(box);
 }
-createBox();
+createBox(0, 2, -3);
 
 // const geometryB = new THREE.BoxGeometry(.1, .1, .1);
 // const materialB = new THREE.MeshBasicMaterial( { color: 0x993300 } );
@@ -68,6 +74,7 @@ for(let i = 0; i < tabBox.length; i++){
 
 for( let i = 0; i < tabMoney.length; i++){
 	scene.add(tabMoney[i]);
+	console.log(tabMoney[i].position);
 }
 
 const aspect = window.innerWidth / window.innerHeight;
@@ -79,16 +86,40 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild( renderer.domElement );
 
-let zM = -15;
+function player(){
+	document.addEventListener('keydown', (event) =>{
+		if(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)){
+			switch(event.key){
+				case 'ArrowRight' : 
+					if(car.position.x > 1.7){
+						break;
+					}
+					car.position.x += .1;
+					break;
+
+				case 'ArrowLeft' : 
+					if(car.position.x < -1.7){
+						break;
+					}
+					car.position.x -= .1;
+					break;
+			}
+		}
+	});
+}
+player();
+
 let zB = -20;
 function animate() {
-	zM += 0.1;
 	for(let i = 0; i < tabMoney.length; i++){
-		tabMoney[i].position.setZ(zM);
+		tabMoney[i].position.z += 0.1
+		if(tabMoney[i].position.z >= -1){
+			tabMoney[i].position.z = z_initial[i];
+		}
 	}
 
 	zB += 0.1;
-	for(let i = 0; i < tabMoney.length; i++){
+	for(let i = 0; i < tabBox.length; i++){
 		tabBox[i].position.setZ(zB);
 	}
 
