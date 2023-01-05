@@ -28,10 +28,6 @@ const geometryCar = new THREE.BoxGeometry(.5, .5, .5);
 const materialCar = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 const car = new THREE.Mesh( geometryCar, materialCar );
 car.position.set(0, 2, -4);
-// let boundingBox = new THREE.Box3().setFromObject(car),
-//     size = boundingBox.getSize();
-// console.log(size);
-
 
 	// the function which will create the money
 const tabMoney = [];
@@ -111,6 +107,8 @@ function player(){
 
 				case 'ArrowLeft' : 
 					if(car.position.x < -1.7){
+						car.position.y = 0;
+						alert('you lose the game');
 						break;
 					}
 					car.position.x -= .1;
@@ -121,28 +119,33 @@ function player(){
 }
 player();
 
-// function detectionCollision(){
-// 	for(let j = 0; j < tabMoney.length; j++){
-// 		money = tabMoney[j];
-// 		if((money.position.x > car.position.x) && (money.position.x < (car.position.x + car.largeur)) ){
-// 			if((money.position.y > car.position.y ) && (money.position.x < (car.position.x + car.hauteur)) ){
-// 				score_content += 5;
-// 				score.innerHTML = score_content;
-// 			}
-// 		}
-// 	}
+function detectionCollision(tabBox, tabMoney, car){
+	for(let j = 0; j < tabMoney.length; j++){
+		let money = tabMoney[j];
+		if((money.position.z > (car.position.z - 0.1)) && (money.position.z < (car.position.z + .1))){
+			if((money.position.y > (car.position.y - 0.5) ) && (money.position.y < (car.position.y + .5)) ){
+				if((money.position.x > (car.position.x - 0.5) ) && (money.position.x < (car.position.x + .5)) ){
+					score += 5;
+					document.getElementById('nb').innerHTML = score;
+					console.log('oui');
+				}	
+			}
+		}
+	}
 
-// 	for(j = 0; j < tabBox.length; j++){
-// 		box = tabBox[j];
-// 		if((box.position.x > car.position.x) && (box.position.x < (car.position.x + car.largeur)) ){
-// 			if((box.position.y > car.position.y ) && (box.position.x < (car.position.x + car.hauteur)) ){
-// 				alert('you lose the game');
-// 				car.position.y = 0;
-// 				break;
-// 			}
-// 		}
-// 	}
-// }
+	for(let t = 0; t < tabBox.length; t++){
+		let box = tabBox[t];
+		if((box.position.z > (car.position.z - 0.1)) && (box.position.z < (car.position.z + .1))){
+			if((box.position.y > (car.position.y - 0.5) ) && (box.position.y < (car.position.y + .5)) ){
+				if((box.position.x > (car.position.x - 0.5) ) && (box.position.x < (car.position.x + .5)) ){
+					alert('you lose the game');
+					car.position.y = 0;
+					break;
+				}
+			}
+		}
+	}
+}
 
 function animate() {
 	for(let i = 0; i < tabMoney.length; i++){
@@ -162,7 +165,7 @@ function animate() {
 	}
 
 	requestAnimationFrame( animate );
-	// detectionCollision();
+	detectionCollision(tabBox, tabMoney, car);
 	renderer.render( scene, camera );
 }
 animate();
