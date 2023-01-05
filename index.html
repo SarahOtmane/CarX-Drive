@@ -18,11 +18,25 @@
     <script type="module" src="script.js" defer></script>
 </head>
 <body>
+    <div id="rules">
+        <span>Before you start the game, read the rules carefully :</span>
+        <ul>
+            <li>1. use the arrows left and right to move the car</li>
+            <li>2. you have +5 when you touch the monney</li>
+            <li>3. if you touch the car or you get out of the road you lose the game</li>
+        </ul>
+        <span>now you can start the game, ENJOY IT !!!!!</span>
+        <button type="button" id="start">start</button>
+    </div>
     <div id="score">
         <span>SCORE </span>
         <span id="nb"> 0</span>
     </div>
-    <span id="touchBox" class="hidden">You touch the box => you lose the game</span>
-    <span id="outRoad" class="hidden">You are out of the road => you lose the game</span>
+    <div id="lose" class="hidden">
+        End of the game.
+        <br>
+        <button type="button" id="restart">Restart</button>
+    </div>
+    </div>
 </body>
 </html>
