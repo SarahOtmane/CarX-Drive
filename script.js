@@ -99,7 +99,7 @@ function player(){
 				case 'ArrowRight' : 
 					if(car.position.x > 2){
 						car.position.y = 0;
-						alert('you lose the game');
+						document.getElementById('outRoad').style.display = 'block';
 						break;
 					}
 					car.position.x += .1;
@@ -108,7 +108,7 @@ function player(){
 				case 'ArrowLeft' : 
 					if(car.position.x < -1.7){
 						car.position.y = 0;
-						alert('you lose the game');
+						document.getElementById('outRoad').style.display = 'block';
 						break;
 					}
 					car.position.x -= .1;
@@ -127,7 +127,7 @@ function detectionCollision(tabBox, tabMoney, car){
 				if((money.position.x > (car.position.x - 0.5) ) && (money.position.x < (car.position.x + .5)) ){
 					score += 5;
 					document.getElementById('nb').innerHTML = score;
-					console.log('oui');
+					money.position.z = z_initialM[j];
 				}	
 			}
 		}
@@ -138,7 +138,7 @@ function detectionCollision(tabBox, tabMoney, car){
 		if((box.position.z > (car.position.z - 0.1)) && (box.position.z < (car.position.z + .1))){
 			if((box.position.y > (car.position.y - 0.5) ) && (box.position.y < (car.position.y + .5)) ){
 				if((box.position.x > (car.position.x - 0.5) ) && (box.position.x < (car.position.x + .5)) ){
-					alert('you lose the game');
+					document.getElementById('touchBox').style.display = 'block';
 					car.position.y = 0;
 					break;
 				}
