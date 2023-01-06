@@ -184,6 +184,7 @@ function animate() {
 
 document.getElementById('start').addEventListener('click', (e) =>{
 	document.getElementById('rules').style.display = 'none';
+	document.getElementById('score').style.display = 'block';
 	animate();
 })
 
