@@ -3,13 +3,17 @@ body{
     background-color: rgb(205, 250, 205);
 }
 
-#score{
+#score, #bestScore{
     display: none;
     position: absolute;
     top: 40px;
     left: 20px;
     font-weight: bold;
     font-size: 1.5rem;
+}
+
+#bestScore{
+    top: 65px;
 }
 
 .hidden, #rules{

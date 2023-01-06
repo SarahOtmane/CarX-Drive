@@ -1,10 +1,11 @@
 import * as THREE from 'three';
-
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { PMREMGenerator } from 'three';
 
-// create the renderer
+let lastScore;
+
+	// create the renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild( renderer.domElement );
@@ -13,8 +14,8 @@ document.body.appendChild( renderer.domElement );
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0X00e600);
 
+	// pour que la voiture ne soit pas en noir (enlever l'ombre)
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
-
 scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
 	// create the road
@@ -31,12 +32,9 @@ loader.load( './karmann-boano.glb', function ( gltf ) {
 	car.position.set(0, 2, -4);
 	car.scale.set(.5, .5, .5);
 	car.rotation.set(0, 3.15, 0);
-	
 	scene.add( car );
 }, undefined, function ( error ) {
-
 	console.error( error );
-
 } );
 
 	// the function which will create the money
@@ -94,7 +92,6 @@ camera.rotateX(-0.4);
 
 let score = document.getElementById('nb').innerHTML;
 score = parseInt(score);
-console.log(score);
 
 function player(){
 	document.addEventListener('keydown', (event) =>{
@@ -103,6 +100,7 @@ function player(){
 				case 'ArrowRight' : 
 					if(car.position.x > 2){
 						car.position.y = 0;
+						sessionStorage.setItem('lastScore', score);
 						document.getElementById('lose').style.display = 'block';
 						cancelAnimationFrame(requestId);
 						break;
@@ -113,6 +111,7 @@ function player(){
 				case 'ArrowLeft' : 
 					if(car.position.x < -1.7){
 						car.position.y = 0;
+						sessionStorage.setItem('lastScore', score);
 						document.getElementById('lose').style.display = 'block';
 						cancelAnimationFrame(requestId);
 						break;
@@ -144,6 +143,7 @@ function detectionCollision(tabBox, tabMoney, car){
 		if((box.position.z > (car.position.z - 0.1)) && (box.position.z < (car.position.z + .1))){
 			if((box.position.y > (car.position.y - 0.5) ) && (box.position.y < (car.position.y + .5)) ){
 				if((box.position.x > (car.position.x - 0.5) ) && (box.position.x < (car.position.x + .5)) ){
+					sessionStorage.setItem('lastScore', score);
 					document.getElementById('lose').style.display = 'block';
 					cancelAnimationFrame(requestId);
 					car.position.y = 0;
@@ -156,7 +156,16 @@ function detectionCollision(tabBox, tabMoney, car){
 
 let restart = document.getElementById('restart');
 restart.addEventListener('click', (e) =>{
-	window.location.href = 'index.html';
+	document.getElementById('lose').style.display = 'none';
+	car.position.y = 2;
+	animate();
+	lastScore = sessionStorage.getItem('lastScore');
+	let bestScore = parseInt(document.getElementById('best').innerHTML);
+	if(lastScore > bestScore){
+		document.getElementById('best').innerHTML = lastScore;
+	}
+	score = 0;
+	document.getElementById('nb').innerHTML = 0;
 })
 
 let requestId;
@@ -185,9 +194,10 @@ function animate() {
 document.getElementById('start').addEventListener('click', (e) =>{
 	document.getElementById('rules').style.display = 'none';
 	document.getElementById('score').style.display = 'block';
+	document.getElementById('bestScore').style.display = 'block';
+
 	animate();
 })
-
 
 
 
