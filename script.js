@@ -13,7 +13,7 @@ const road = new THREE.Mesh( geometryR, materialR );
 road.position.setZ(-91);
 
 const loader = new GLTFLoader();
-loader.load( 'path/to/model.glb', function ( gltf ) {
+loader.load( 'GreenCar.glb', function ( gltf ) {
 
 	scene.add( gltf.scene );
 
@@ -100,6 +100,7 @@ function player(){
 					if(car.position.x > 2){
 						car.position.y = 0;
 						document.getElementById('lose').style.display = 'block';
+						cancelAnimationFrame(requestId);
 						break;
 					}
 					car.position.x += .1;
@@ -109,6 +110,7 @@ function player(){
 					if(car.position.x < -1.7){
 						car.position.y = 0;
 						document.getElementById('lose').style.display = 'block';
+						cancelAnimationFrame(requestId);
 						break;
 					}
 					car.position.x -= .1;
@@ -139,6 +141,7 @@ function detectionCollision(tabBox, tabMoney, car){
 			if((box.position.y > (car.position.y - 0.5) ) && (box.position.y < (car.position.y + .5)) ){
 				if((box.position.x > (car.position.x - 0.5) ) && (box.position.x < (car.position.x + .5)) ){
 					document.getElementById('lose').style.display = 'block';
+					cancelAnimationFrame(requestId);
 					car.position.y = 0;
 					break;
 				}
@@ -152,6 +155,7 @@ restart.addEventListener('click', (e) =>{
 	window.location.href = 'index.html';
 })
 
+let requestId;
 function animate() {
 	for(let i = 0; i < tabMoney.length; i++){
 		if(tabMoney[i].position.z >= -2.2){
@@ -169,7 +173,7 @@ function animate() {
 		tabBox[i].position.z += 0.1
 	}
 
-	requestAnimationFrame( animate );
+	requestId = requestAnimationFrame( animate );
 	detectionCollision(tabBox, tabMoney, car);
 	renderer.render( scene, camera );
 }
