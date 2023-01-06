@@ -1,10 +1,21 @@
 import * as THREE from 'three';
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+import { PMREMGenerator } from 'three';
+
+// create the renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild( renderer.domElement );
 
 	// create the scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0X00e600);
+
+const pmremGenerator = new THREE.PMREMGenerator(renderer);
+
+scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
 	// create the road
 const geometryR = new THREE.BoxGeometry(5, 3, 180);
@@ -12,22 +23,21 @@ const materialR = new THREE.MeshBasicMaterial( { color: 0xd6d6c2 } );
 const road = new THREE.Mesh( geometryR, materialR );
 road.position.setZ(-91);
 
+	//create the car
+let car;
 const loader = new GLTFLoader();
-loader.load( 'GreenCar.glb', function ( gltf ) {
-
-	scene.add( gltf.scene );
-
+loader.load( './karmann-boano.glb', function ( gltf ) {
+	car = gltf.scene;
+	car.position.set(0, 2, -4);
+	car.scale.set(.5, .5, .5);
+	car.rotation.set(0, 3.15, 0);
+	
+	scene.add( car );
 }, undefined, function ( error ) {
 
 	console.error( error );
 
 } );
-
-	// create the car
-const geometryCar = new THREE.BoxGeometry(.5, .5, .5);
-const materialCar = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-const car = new THREE.Mesh( geometryCar, materialCar );
-car.position.set(0, 2, -4);
 
 	// the function which will create the money
 const tabMoney = [];
@@ -68,7 +78,6 @@ createBox(1, 2, -30);
 createBox(-1, 2, -25);
 
 	// add the obejcts to the scene
-scene.add(car);
 scene.add(road);
 for(let i = 0; i < tabBox.length; i++){
 	scene.add(tabBox[i]);
@@ -82,11 +91,6 @@ const aspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera(40,aspect,.1,5000);
 camera.position.set(0, 5, 1);
 camera.rotateX(-0.4);
-
-	// create the renderer
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild( renderer.domElement );
 
 let score = document.getElementById('nb').innerHTML;
 score = parseInt(score);
