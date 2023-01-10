@@ -175,7 +175,15 @@ function animate() {
 			tabMoney[i].position.z = z_initialM[i];
 			break;
 		}
-		tabMoney[i].position.z += 0.1
+		
+		if(score < 50){
+			tabMoney[i].position.z += 0.1
+		} else if(score < 100){
+			tabMoney[i].position.z += 0.13
+		}else if(score < 150){
+			tabMoney[i].position.z += 0.17
+		}
+		
 	}
 
 	for(let i = 0; i < tabBox.length; i++){
@@ -183,7 +191,15 @@ function animate() {
 			tabBox[i].position.z = z_initialB[i];
 			break;
 		}
-		tabBox[i].position.z += 0.1
+
+		if(score < 50){
+			tabBox[i].position.z += 0.1
+		} else if(score < 100){
+			tabBox[i].position.z += 0.13
+		}else if(score < 150){
+			tabBox[i].position.z += 0.17
+		}
+		
 	}
 
 	requestId = requestAnimationFrame( animate );
